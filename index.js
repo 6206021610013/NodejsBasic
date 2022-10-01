@@ -1,12 +1,22 @@
+const fs = require('fs')
 const http = require('http')
 
+const indexPage  = fs.readFileSync(`${__dirname}/webpages/index.html`, 'utf-8')
+const productPage  = fs.readFileSync(`${__dirname}/webpages/product.html`, 'utf-8')
+
 const server = http.createServer((req,res)=>{
-    const myhtml = `
-    <h1>Hello Node.js</h1>
-    <p style="font-weight:bold;color:red;">| Non | Natanon Nantajittanon |</p>
-    `
-    res.write(myhtml)
-    res.end()
+    const pathName = req.url
+    console.log("url = ", pathName)
+    if(pathName === "/" || pathName === "/home"){
+        res.end(indexPage)
+    }
+    else if(pathName === "/product"){
+        res.end(productPage)
+    }
+    else {
+        res.writeHead(404)
+        res.end("<h1>Not Found</h1>")
+    }
 })
 
 server.listen(8080,'localhost',()=>{
